@@ -14,12 +14,16 @@ def update_quizzes():
         
 
 def get_quizzes(request):
-    data = {
-        "message": "Success",
-        "quizzes": []
-    }
     quizzes = Quiz.objects.order_by("?")[:3]
-    for quiz in quizzes:
-        data["quizzes"].append(model_to_dict(quiz))
+    if len(quizzes) < 3:
+        data = {"message": "Fail"}
+
+    else:
+        data = {
+            "message": "Success",
+            "quizzes": []
+        }
+        for quiz in quizzes:
+            data["quizzes"].append(model_to_dict(quiz))
 
     return HttpResponse(json.dumps(data, ensure_ascii=False), "application/json")
