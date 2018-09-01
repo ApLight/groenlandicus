@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 
-from .model import Account
+from .models import Account
 
 # Create your views here.
 def login(request):
