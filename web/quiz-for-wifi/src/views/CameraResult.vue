@@ -55,7 +55,6 @@
     @media screen and (max-width: 992px) {
         .complete {
             padding: 20px;
-            width: auto;
         }
 
         .btn-box {

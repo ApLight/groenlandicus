@@ -9,7 +9,7 @@
             <div class="icon-quiz">Quiz</div>
             <!--TODO: GET DATA - 문제 가져오기-->
             <h1>{{quiz[quizIndex].problem}}</h1>
-            <img class="body-img" src="../assets/img-wind.png" alt="">
+            <img class="body-img" :src="require('@/assets/quiz/' + quiz[quizIndex].id+ '.jpg')" alt="">
         </div>
         <div class="answer-container">
             <div class="btn-answer btn-yes" @click="isCorrectAnswer(true)">
@@ -301,7 +301,7 @@
 
     /* On screens that are 992px or less, set the background color to blue */
     @media screen and (max-width: 992px) {
-        .quiz {
+        .quiz, .quiz-result {
             padding: 10px;
             width: auto;
         }

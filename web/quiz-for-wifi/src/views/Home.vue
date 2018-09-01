@@ -27,7 +27,7 @@
         name: 'home',
         components: {
             HelloWorld,
-        }
+        },
     }
 </script>
 <style>
