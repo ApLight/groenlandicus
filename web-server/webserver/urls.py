@@ -16,6 +16,16 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from account import views as account_views
+from quiz import views as quiz_views
+from entry import views as entry_views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^login/', account_views.login, name="login"),
+    url(r'^feed/', account_views.feed_seolgi, name="feed"),
+    url(r'^quizzes/', quiz_views.get_quizzes, name="get_quizzes"),
+    url(r'^index/', entry_views.get_index, name="get_index"),
 ]
+
+quiz_views.update_quizzes() # When the project starts, execute "update_quizzes".
