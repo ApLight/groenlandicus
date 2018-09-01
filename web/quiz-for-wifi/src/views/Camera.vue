@@ -8,51 +8,86 @@
 </template>
 
 <script>
-
-
     export default {
         name: 'camera',
         data: function () {
             return {
                 constraints: {video: true},
-                // client: undefined
+                loader: false,
+                result: false,
+                apiKey: "AIzaSyBBNonS0K3J-lZtXH6_qZJy9DTdd4s7XE4",  //google cloud api  Browser key
+                data: {               //type vision api Request
+                    "requests": [{
+                        "features": [{
+                            "type": "LABEL_DETECTION"
+                        }],
+                        "image": {
+                            "content": null
+                        }
+                    }]
+                }
             }
         },
         mounted: function () {
-            let video = this.$el.querySelector('.video');
+            const video = this.$el.querySelector('.video');
             navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
                     video.srcObject = stream
+                    video.play();
                 }
             );
-            video.height = window.innerHeight
-
-            // this.client = new vision.ImageAnnotatorClient();
 
         },
         methods: {
             captureImage() {
-                let canvas = this.$el.querySelector('#snapshot');
-                let context = canvas.getContext('2d');
-                let video = this.$el.querySelector('.video');
+                const canvas = this.$el.querySelector('#snapshot');
+                const context = canvas.getContext('2d');
+                const video = this.$el.querySelector('.video');
                 // Draw the video frame to the canvas.
                 context.drawImage(video, 0, 0, canvas.width,
                     canvas.height);
 
-                // Creates a client
-                // const client = new vision.ImageAnnotatorClient();
-                //
-                // // Performs label detection on the image file
-                // client
-                //     .labelDetection('./assets/logo.png')
-                //     .then(results => {
-                //         const labels = results[0].labelAnnotations;
-                //
-                //         console.log('Labels:');
-                //         labels.forEach(label => console.log(label.description));
-                //     })
-                //     .catch(err => {
-                //         console.error('ERROR:', err);
-                //     });
+
+                const vm = this;
+                this.result = false;
+                this.loader = true;
+
+                const base64 = canvas.toDataURL();
+                const finalImage = base64.replace("data:image/png;base64,", "");
+                this.data.requests[0].image.content = finalImage;
+
+                const baseURI = `https://vision.googleapis.com/v1/images:annotate?key=${this.apiKey}`;
+
+                this.$http.post(`${baseURI}`,this.data)
+                    .then(response => {
+                        let detectResult = response.data.responses[0].labelAnnotations;
+
+                        let count = 0;
+                        // console.log(detectResult)
+                        for(let i=0 ; i < detectResult.length; i++){
+                            if( detectResult[i].description === 'bottle' || detectResult[i].description === 'glass'){
+                                if(detectResult[i].topicality > 0.6)
+                                    count++
+                            }
+                        }
+
+                        if(count === 1){
+                            this.$router.push('/camera/ok')
+                        }else
+                            this.$router.push('/')
+                        vm.loader = false;
+                        vm.result = true;
+                    }).catch(error => {
+                    console.log(error);
+                })
+                // .then((res) => {
+                //     console.log(res)
+                //     // const result = response.data.responses[0].faceAnnotations[0];
+                //     vm.loader = false;
+                //     vm.result = true;
+                // })
+                // .catch((e) => {
+                //     console.log(e)
+                // })
             },
             moveToHome() {
                 this.$router.push('/')

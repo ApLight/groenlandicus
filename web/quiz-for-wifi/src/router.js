@@ -23,6 +23,15 @@ export default new Router({
         }
         ,
         {
+            path: '/camera/ok',
+            name: 'cameraResult',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () => import(/* webpackChunkName: "about" */ './views/CameraResult.vue')
+        }
+        ,
+        {
             path: '/quiz',
             name: 'quiz',
             // route level code-splitting

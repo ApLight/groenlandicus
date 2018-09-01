@@ -1,20 +1,24 @@
 <template>
     <div class="complete">
-        <div class="body-box">
-            <p class="icon-body">🎉 </p>
-            <h1>축하합니다!</h1>
-            <h2>퀴즈 3개를 모두 맞추셨습니다.</h2>
-            <h2>WiFi에 연결되었어요</h2>
-        </div>
+        <p class="icon-body">👍</p>
+        <h1>머그잔 인증완료!</h1>
+        <h2>머그잔을 이용한 당신은</h2>
+        <h2>환경 히어로</h2>
+        <h2>이제 WiFi를 마음껏 즐기세요~</h2>
         <div class="btn-box">
-            <button @click="">확인</button>
+            <button @click="moveToHome()">확인</button>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'complete',
+        name: 'cameraResult',
+        methods:{
+            moveToHome(){
+                this.$router.push('/')
+            }
+        }
     }
 </script>
 <style scoped>
@@ -24,12 +28,18 @@
         margin: auto;
     }
 
+    .complete h1,
+    .complete h2{
+        color: #ffffff;
+    }
+
     .icon-body {
-        font-size: 3em;
+        font-size: 4em;
+        margin-bottom: 0;
     }
 
     .btn-box {
-        margin: 15px auto;
+        margin: 110px auto 15px auto;
     }
 
     .body-box {
@@ -41,9 +51,9 @@
         margin-bottom: 25px;
     }
 
-    .btn-box button{
+    .btn-box button {
         width: 100%;
-        padding: 20px ;
+        padding: 20px;
         font-size: 1.5em;
         border-radius: 8px;
         background-color: #00a878;
@@ -54,6 +64,7 @@
 
     @media screen and (max-width: 992px) {
         .complete {
+            width: auto;
             padding: 20px;
         }
 
@@ -63,7 +74,7 @@
         }
 
         .body-box h1 {
-            font-size: 20px;
+            font-size: 1.5em;
         }
     }
 </style>
