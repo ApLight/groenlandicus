@@ -23,6 +23,7 @@ from entry import views as entry_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/', account_views.login, name="login"),
+    url(r'^feed/', account_views.feed_seolgi, name="feed"),
     url(r'^quizzes/', quiz_views.get_quizzes, name="get_quizzes"),
     url(r'^index/', entry_views.get_index, name="get_index"),
 ]
