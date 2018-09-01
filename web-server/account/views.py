@@ -33,14 +33,11 @@ def login(request):
 def feed_seolgi(request):
     data = {'message': ""}
 
-    if not Account.objects.filter(id=request.session['id']).exists():
-        data['message'] = "Session out"
-        return HttpResponse(json.dump(data), status=401)
-    else:
-        account = Account.objects.get(id=request.session['id'])
-        exp = request.POST.get('exp')
-        account.feed(exp)
-        account.save()
+    userSeq = request.POST.get("id")
+    account = Account.objects.get(id=userSeq)
+    exp = request.POST.get('exp')
+    account.feed(exp)
+    account.save()
 
     data['account'] = model_to_dict(account)
     
