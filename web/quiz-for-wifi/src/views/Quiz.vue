@@ -114,7 +114,7 @@
 
                 this.$http.get(`${baseURI}/quizzes/`)
                     .then((result) => {
-                        // this.quiz = result.quizzes;
+                        this.quiz = result.data.quizzes;
                         console.log(result.data.quizzes)
                     })
                     .catch((e) => {
