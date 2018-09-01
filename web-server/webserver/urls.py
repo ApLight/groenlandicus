@@ -17,10 +17,12 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from quiz import views as quiz_views
+from entry import views as entry_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^quizzes/', quiz_views.get_quizzes, name="get_quizzes"),
+    url(r'^index/', entry_views.get_index, name="get_index"),
 ]
 
 quiz_views.update_quizzes() # When the project starts, execute "update_quizzes".
