@@ -11,6 +11,11 @@ def update_quizzes():
         for row in reader:
             if not Quiz.objects.filter(problem=row["problem"]).exists():
                 Quiz.objects.create(problem=row["problem"], answer=row["answer"], explanation=row["explanation"])
+            else:
+                quiz = Quiz.objects.get(problem=row["problem"])
+                quiz.img_url = row["img_url"]
+                quiz.save()
+
         
 
 def get_quizzes(request):
