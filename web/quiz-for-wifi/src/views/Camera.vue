@@ -1,6 +1,6 @@
 <template>
     <div class="camera">
-        <source class="video" autoplay></source>
+        <video class="video" autoplay></video>
     </div>
 </template>
 
@@ -13,7 +13,7 @@
             }
         },
         mounted: function () {
-            navigator.mediaDevices.getUserMedia(this.constraints).then((stream) => {
+            navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
                     this.$el.querySelector('.video').srcObject = stream
                 }
             );
