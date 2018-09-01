@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from quiz import views as quiz_views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^quizzes/', quiz_views.get_quizzes, name="get_quizzes"),
 ]
