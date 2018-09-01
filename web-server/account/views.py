@@ -16,6 +16,9 @@ def login(request):
         account = Account.objects.get(kakaoID=kakaoID)
         data['message'] = "Login"
 
+    request.session['id'] = account.id
+    request.session['kakaoID'] = account.kakaoID
+
     data["level"] = account.level
     
     return HttpResponse(json.dumps(data), "application/json")
