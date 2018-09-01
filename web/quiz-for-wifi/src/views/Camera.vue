@@ -57,23 +57,25 @@
 
                 const baseURI = `https://vision.googleapis.com/v1/images:annotate?key=${this.apiKey}`;
 
-                this.$http.post(`${baseURI}`,this.data)
+                this.$http.post(`${baseURI}`, this.data)
                     .then(response => {
                         let detectResult = response.data.responses[0].labelAnnotations;
 
                         let count = 0;
                         // console.log(detectResult)
-                        for(let i=0 ; i < detectResult.length; i++){
-                            if( detectResult[i].description === 'bottle' || detectResult[i].description === 'glass'){
-                                if(detectResult[i].topicality > 0.6)
-                                    count++
+                        for (let i = 0; i < detectResult.length; i++) {
+                            if (detectResult[i].description === 'cup') {
+                               count++
+
                             }
                         }
 
-                        if(count === 1){
+                        if(count)
                             this.$router.push('/camera/ok')
-                        }else
+                        else
                             this.$router.push('/')
+
+
                         vm.loader = false;
                         vm.result = true;
                     }).catch(error => {
