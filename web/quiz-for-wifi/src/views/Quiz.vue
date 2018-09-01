@@ -20,26 +20,46 @@
             </div>
         </div>
     </div>
-    <div v-else-if="userAnswer === true" class="complete">
+    <div v-else-if="userAnswer === true" class="quiz-result quiz-result-success">
+        <div class="header-box">
+            <h1 class="icon-success" >👏</h1>
+            <Header msg="짝짝짝! 정답이에요!"></Header>
+            <Counter :totalCount="totalCount" :passCount="passCount"></Counter>
+        </div>
         <div class="body-box">
-            <p class="icon-body">🎉 </p>
-            <h1>축하합니다!</h1>
-            <h2>퀴즈 3개를 모두 맞추셨습니다.</h2>
-            <h2>WiFi에 연결되었어요</h2>
+            <h1 class="quiz-problem">{{quiz[quizIndex].problem}}</h1>
+            <h1 class="quiz-answer">
+                <span class="text-answer">정답 : </span>
+                <img class="icon-answer icon-yes" v-if="quiz[quizIndex].answer" src="../assets/icon-yes.png" alt="">
+                <img class="icon-answer icon-no" v-else src="../assets/icon-no.png" alt="">
+            </h1>
+            <h1 class="quiz-explanation">{{quiz[quizIndex].explanation}}</h1>
         </div>
         <div class="btn-box">
-            <router-link to="#" @click="">확인</router-link>
+            <button @click="moveToNextProblem(false)">머그잔 인증 바로가기</button>
+            <button @click="moveToNextProblem(true)">확인</button>
         </div>
     </div>
-    <div v-else-if="userAnswer === false" class="complete">
+    <div v-else-if="userAnswer === false" class="quiz-result quiz-result-fail">
+        <div class="header-box">
+            <h1 class="icon-fail">😭</h1>
+            <Header msg="앗... 틀렸어요"></Header>
+            <Counter :totalCount="totalCount" :passCount="passCount"></Counter>
+        </div>
         <div class="body-box">
-            <p class="icon-body">🎉 </p>
-            <h1>틀렷!</h1>
-            <h2>퀴즈 3개를 모두 맞추셨습니다.</h2>
-            <h2>WiFi에 연결되었어요</h2>
+            <h1 class="quiz-problem">{{quiz[quizIndex].problem}}</h1>
+            <h1 class="quiz-answer">
+                <span class="text-answer">정답 : </span>
+                <img class="icon-answer icon-yes" v-if="quiz[quizIndex].answer" src="../assets/icon-yes.png" alt="">
+                <img class="icon-answer icon-no" v-else src="../assets/icon-no.png" alt="">
+            </h1>
+            <h1 class="quiz-explanation">{{quiz[quizIndex].explanation}}</h1>
         </div>
         <div class="btn-box">
-            <router-link to="#">확인</router-link>
+            <div class="btn-box">
+                <button @click="moveToNextProblem(false)">머그잔 인증 바로가기</button>
+                <button @click="moveToNextProblem(true)">확인</button>
+            </div>
         </div>
     </div>
 </template>
@@ -62,29 +82,81 @@
                 totalCount: 3,
                 currentIndex: 1,
                 userAnswer: null,
-                quiz: undefined,
+                quiz: [
+                    {
+                        "id": 12,
+                        "problem": "다 쓴 핸드폰 배터리는 일반 쓰레기봉투에 버려요.",
+                        "answer": false,
+                        "explanation": "배터리는 발열 위험이 있으므로 +,-극을 테이프로 막고 별도의 수거함에 버려야 해요.",
+                        "img_url": ""
+                    },
+                    {
+                        "id": 2,
+                        "problem": "유리컵은 유리병과 달리 일반 쓰레기에요.",
+                        "answer": true,
+                        "explanation": "유리컵은 유리병과는 다르게 분리수거 항목에 포함되지 않아요.",
+                        "img_url": ""
+                    },
+                    {
+                        "id": 8,
+                        "problem": "나무젓가락은 나무 재질이므로 종이류로 분리수거해야 한다.",
+                        "answer": false,
+                        "explanation": "나무젓가락은 일반 종이와 달리 재활용되지 않으므로 종량제 봉투에 버려주세요.",
+                        "img_url": ""
+                    }
+                ],
                 quizIndex: 0,
             }
         },
         methods: {
-            isCorrectAnswer(answer) {
+            fetchData(){
+                const baseURI = 'http://35.226.157.77';
 
+                this.$http.get(`${baseURI}/quizzes/`)
+                    .then((result) => {
+                        // this.quiz = result.quizzes;
+                        console.log(result.data.quizzes)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
+                // console.log(this.quiz);
+            },
+            isCorrectAnswer(answer) {
+                console.log(this.quiz[this.quizIndex].answer)
                 //TODO: 답확인
                 if (answer === this.quiz[this.quizIndex].answer) {
+                    this.passCount++;
                     console.log("정답!")
-                    this.quizIndex++;
                     this.userAnswer = true;
-                    // if(this.quizIndex > 2){
-                    //     새요청 => 데이터 받아오기
-                    // }
                 } else {
+                    console.log("오답!ㅠㅠㅠ")
                     this.userAnswer = false;
                 }
-                // this.passCount++;
-                //
+
                 // if(this.passCount === 3){
                 //     this.$router.push('complete')
                 // }
+            },
+            moveToNextProblem(isTrue){
+                //다음 문제로 이동
+                if(isTrue){
+                    this.currentIndex++;
+                    this.quizIndex++;
+                    this.userAnswer = null;
+
+                    if(this.passCount === this.totalCount){
+                        this.$router.push('/complete')
+                    }
+                    if(this.quizIndex > 2){
+                        this.fetchData();
+                        this.currentIndex = 1;
+                        this.quizIndex = 0;
+                    }
+                }else{
+                    this.$router.push('/camera');
+                }
             }
         }
         ,
@@ -107,49 +179,9 @@
 
             }
         },
-        created: function () {
-            // const baseURI = 'http://35.226.157.77';
-            //
-            // let config = {
-            //     headers: {
-            //         // 'Content-type': 'application/json',
-            //         'Access-Control-Allow-Origin': '*',
-            //     }
-            // };
-            //
-            // this.$http.get(`${baseURI}/quizzes/`, config)
-            //     .then((result) => {
-            //         console.log(result)
-            //     })
-            //     .catch((e) => {
-            //         console.log(e)
-            //     })
-            //
-            this.quiz = [
-                {
-                    "id": 9,
-                    "problem": "프링*스 통은 종이 박스니까 종이류로 분리해요.",
-                    "answer": false,
-                    "explanation": "알루미늄, 종이가 붙어있어 재활용이 불가능해요.",
-                    "img_url": ""
-                },
-                {
-                    "id": 10,
-                    "problem": "광고지, 과자 박스, A4용지는 모두 종이류로 분리수거할 수 있어요.",
-                    "answer": false,
-                    "explanation": "코팅된 광고지의 경우 재활용이 되지 않아 종이류가 아닌 일반 쓰레기로 버려야 해요.",
-                    "img_url": ""
-                },
-                {
-                    "id": 7,
-                    "problem": "파뿌리는 일반 쓰레기에요.",
-                    "answer": true,
-                    "explanation": "양파껍질, 파뿌리 등 채소 껍질과 뿌리는 일반 쓰레기로 배출해야 해요.",
-                    "img_url": ""
-                }
-            ]
-
-            console.log(this.quiz);
+        created () {
+            // 뷰가 생성되고 데이터가 이미 감시 되고 있을 때 데이터를 가져온다.
+            this.fetchData()
         }
 
     }
@@ -234,6 +266,42 @@
         margin-left: 10px;
     }
 
+    .quiz-result .icon-answer{
+        width: 30px;
+    }
+
+    .quiz-result .text-answer{
+        font-size: 40px;
+    }
+
+    .quiz-result .btn-box{
+        display: flex;
+    }
+
+    .quiz-result .btn-box button:hover{
+        cursor: pointer;
+        opacity: 0.8;
+    }
+
+    .quiz-result .btn-box button{
+        width: 100%;
+        padding: 20px ;
+        font-size: 1.5em;
+        border-radius: 8px;
+        background-color: #00a878;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .quiz-result .btn-box button:first-child{
+        margin-right: 10px;
+    }
+
+    .quiz-result .btn-box button:last-child{
+        margin-left: 10px;
+    }
+
     /* On screens that are 992px or less, set the background color to blue */
     @media screen and (max-width: 992px) {
         .quiz {
@@ -267,6 +335,21 @@
 
         .btn-answer {
             padding: 25px;
+        }
+
+
+        .quiz-result .btn-box{
+            flex-direction: column;
+        }
+
+
+        .quiz-result .btn-box button:first-child{
+            margin: 0;
+            margin-bottom: 10px;
+        }
+        .quiz-result .btn-box button:last-child{
+            margin: 0;
+            margin-top: 10px;
         }
     }
 </style>
