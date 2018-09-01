@@ -1,6 +1,5 @@
 <template>
     <div class="complete">
-
         <div class="body-box">
             <p class="icon-body">🎉 </p>
             <h1>축하합니다!</h1>
@@ -8,7 +7,7 @@
             <h2>WiFi에 연결되었어요</h2>
         </div>
         <div class="btn-box">
-            <router-link to="#" @click="">확인</router-link>
+            <button @click="">확인</button>
         </div>
     </div>
 </template>
@@ -20,7 +19,9 @@
 </script>
 <style scoped>
     .complete {
+        width: 1000px;
         padding: 50px 0;
+        margin: auto;
     }
 
     .icon-body {
@@ -28,7 +29,6 @@
     }
 
     .btn-box {
-        width: 1000px;
         margin: 15px auto;
     }
 
@@ -39,6 +39,17 @@
         box-shadow: 0 5px 16px 1px rgba(157, 157, 157, 0.5);
         padding: 45px;
         margin-bottom: 25px;
+    }
+
+    .btn-box button{
+        width: 100%;
+        padding: 20px ;
+        font-size: 1.5em;
+        border-radius: 8px;
+        background-color: #00a878;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
     }
 
     @media screen and (max-width: 992px) {

@@ -1,7 +1,7 @@
 <template>
     <div v-if="userAnswer === null" class="quiz">
         <div class="header-box">
-            <img v-if="this.currentIndex === 1" class="icon-wifi" src="../assets/icon-wifi.png">
+            <!--<img v-if="this.currentIndex === 1" class="icon-wifi" src="../assets/icon-wifi.png">-->
             <Header :msg="changeHeaderText"></Header>
             <Counter :totalCount="totalCount" :passCount="passCount"></Counter>
         </div>
@@ -22,8 +22,7 @@
     </div>
     <div v-else-if="userAnswer === true" class="quiz-result quiz-result-success">
         <div class="header-box">
-            <h1 class="icon-success" >👏</h1>
-            <Header msg="짝짝짝! 정답이에요!"></Header>
+            <Header msg="👏 짝짝짝! 정답이에요!"></Header>
             <Counter :totalCount="totalCount" :passCount="passCount"></Counter>
         </div>
         <div class="body-box">
@@ -42,8 +41,7 @@
     </div>
     <div v-else-if="userAnswer === false" class="quiz-result quiz-result-fail">
         <div class="header-box">
-            <h1 class="icon-fail">😭</h1>
-            <Header msg="앗... 틀렸어요"></Header>
+            <Header msg="😭 앗... 틀렸어요"></Header>
             <Counter :totalCount="totalCount" :passCount="passCount"></Counter>
         </div>
         <div class="body-box">
@@ -56,10 +54,8 @@
             <h1 class="quiz-explanation">{{quiz[quizIndex].explanation}}</h1>
         </div>
         <div class="btn-box">
-            <div class="btn-box">
-                <button @click="moveToNextProblem(false)">머그잔 인증 바로가기</button>
-                <button @click="moveToNextProblem(true)">확인</button>
-            </div>
+            <button @click="moveToNextProblem(false)">머그잔 인증 바로가기</button>
+            <button @click="moveToNextProblem(true)">확인</button>
         </div>
     </div>
 </template>
@@ -109,7 +105,7 @@
             }
         },
         methods: {
-            fetchData(){
+            fetchData() {
                 const baseURI = 'http://35.226.157.77';
 
                 this.$http.get(`${baseURI}/quizzes/`)
@@ -139,22 +135,22 @@
                 //     this.$router.push('complete')
                 // }
             },
-            moveToNextProblem(isTrue){
+            moveToNextProblem(isTrue) {
                 //다음 문제로 이동
-                if(isTrue){
+                if (isTrue) {
                     this.currentIndex++;
                     this.quizIndex++;
                     this.userAnswer = null;
 
-                    if(this.passCount === this.totalCount){
+                    if (this.passCount === this.totalCount) {
                         this.$router.push('/complete')
                     }
-                    if(this.quizIndex > 2){
+                    if (this.quizIndex > 2) {
                         this.fetchData();
                         this.currentIndex = 1;
                         this.quizIndex = 0;
                     }
-                }else{
+                } else {
                     this.$router.push('/camera');
                 }
             }
@@ -165,21 +161,21 @@
                 if (this.userAnswer === null) {
                     switch (this.passCount) {
                         case 0:
-                            return "퀴즈 3개를 맞추면 WiFi에 연결할 수 있어요!";
+                            return "📡 퀴즈 3개를 맞추면 WiFi에 연결할 수 있어요!";
                         case 1:
-                            return "정답을 맞췄어요 ^_^";
+                            return "👍 당신은 분리수거 천재?";
                         case 2:
-                            return "하나만 더 맞추면 돼요!"
+                            return "🤩 하나만 더 맞추면 돼요!"
                     }
-                } else if(this.userAnswer === false){
+                } else if (this.userAnswer === false) {
                     return "틀렸어요 ㅠㅠ";
-                } else{
+                } else {
                     return ""
                 }
 
             }
         },
-        created () {
+        created() {
             // 뷰가 생성되고 데이터가 이미 감시 되고 있을 때 데이터를 가져온다.
             this.fetchData()
         }
@@ -188,7 +184,7 @@
 </script>
 
 <style scoped>
-    .quiz {
+    .quiz,.quiz-result {
         width: 1000px;
         margin: auto;
     }
@@ -212,6 +208,7 @@
     .header-box {
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
 
     .body-box {
@@ -266,26 +263,26 @@
         margin-left: 10px;
     }
 
-    .quiz-result .icon-answer{
+    .quiz-result .icon-answer {
         width: 30px;
     }
 
-    .quiz-result .text-answer{
+    .quiz-result .text-answer {
         font-size: 40px;
     }
 
-    .quiz-result .btn-box{
+    .quiz-result .btn-box {
         display: flex;
     }
 
-    .quiz-result .btn-box button:hover{
+    .quiz-result .btn-box button:hover {
         cursor: pointer;
         opacity: 0.8;
     }
 
-    .quiz-result .btn-box button{
+    .quiz-result .btn-box button {
         width: 100%;
-        padding: 20px ;
+        padding: 20px;
         font-size: 1.5em;
         border-radius: 8px;
         background-color: #00a878;
@@ -294,11 +291,11 @@
         font-weight: bold;
     }
 
-    .quiz-result .btn-box button:first-child{
+    .quiz-result .btn-box button:first-child {
         margin-right: 10px;
     }
 
-    .quiz-result .btn-box button:last-child{
+    .quiz-result .btn-box button:last-child {
         margin-left: 10px;
     }
 
@@ -337,17 +334,16 @@
             padding: 25px;
         }
 
-
-        .quiz-result .btn-box{
+        .quiz-result .btn-box {
             flex-direction: column;
         }
 
-
-        .quiz-result .btn-box button:first-child{
+        .quiz-result .btn-box button:first-child {
             margin: 0;
             margin-bottom: 10px;
         }
-        .quiz-result .btn-box button:last-child{
+
+        .quiz-result .btn-box button:last-child {
             margin: 0;
             margin-top: 10px;
         }
